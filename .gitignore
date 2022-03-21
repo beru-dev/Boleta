@@ -12,6 +12,8 @@ localdb.db
 
 notes.txt
 
-pgdata
+/pgdata
 
 .env
+
+.DS_Store
