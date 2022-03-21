@@ -11,3 +11,7 @@ secrets.properties
 localdb.db
 
 notes.txt
+
+pgdata
+
+.env

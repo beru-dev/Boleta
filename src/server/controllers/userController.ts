@@ -4,28 +4,28 @@ import UserModel from "../models/UserModel";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
-// const createFirstUser = async () => {
-//     const { FIRST_USER_NAME, FIRST_USER_EMAIL, FIRST_USER_PASS } = process.env;
-//     if(!FIRST_USER_NAME) {
-//         console.error("YOU FORGOT TO PUT THE FIRST USER NAME INTO THE ENV DUMMY!");
-//         return
-//     }
-//     if(!FIRST_USER_EMAIL) {
-//         console.error("YOU FORGOT TO PUT THE FIRST USER EMAIL INTO THE ENV DUMMY!");
-//         return
-//     }
-//     if(!FIRST_USER_PASS) {
-//         console.error("YOU FORGOT TO PUT THE FIRST USER PASS INTO THE ENV DUMMY!");
-//         return
-//     }
-//     UserModel.createUser({
-//         user_name: FIRST_USER_NAME,
-//         user_email: FIRST_USER_EMAIL,
-//         password: await bcrypt.hash(FIRST_USER_PASS, 10)
-//     });
-// }
+const createFirstUser = async () => {
+    const { FIRST_USER_NAME, FIRST_USER_EMAIL, FIRST_USER_PASS } = process.env;
+    if(!FIRST_USER_NAME) {
+        console.error("YOU FORGOT TO PUT THE FIRST USER NAME INTO THE ENV DUMMY!");
+        return
+    }
+    if(!FIRST_USER_EMAIL) {
+        console.error("YOU FORGOT TO PUT THE FIRST USER EMAIL INTO THE ENV DUMMY!");
+        return
+    }
+    if(!FIRST_USER_PASS) {
+        console.error("YOU FORGOT TO PUT THE FIRST USER PASS INTO THE ENV DUMMY!");
+        return
+    }
+    UserModel.createUser({
+        user_name: FIRST_USER_NAME,
+        user_email: FIRST_USER_EMAIL,
+        password: await bcrypt.hash(FIRST_USER_PASS, 10)
+    });
+}
 
-// createFirstUser();
+createFirstUser();
 
 export default Router()
     .post("/login", async (req, res) => {
