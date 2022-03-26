@@ -12,7 +12,7 @@ export default {
         const [project_name, ticket_number] = ticket.split("-");
         return await Ticket.findOne({
             where: {
-                [Op.and] :{
+                [Op.and]: {
                     project_name,
                     ticket_number
                 }

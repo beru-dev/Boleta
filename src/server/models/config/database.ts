@@ -6,7 +6,7 @@ export default process.env.POSTGRES_DB ?
         process.env.POSTGRES_USER || "",
         process.env.POSTGRES_PASSWORD || "",
         {
-            host: 'postgres',
+            host: 'host.docker.internal',
             dialect: 'postgres',
             logging: false,
             pool: {

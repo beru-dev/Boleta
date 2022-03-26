@@ -6,8 +6,8 @@ services:
     build: .
     ports:
       - "62000:62000"
-    depends_on:
-      - "postgres"
+    # depends_on:
+    #   - "postgres"
     environment:
       - POSTGRES_USER
       - POSTGRES_PASSWORD
@@ -16,23 +16,22 @@ services:
       - FIRST_USER_EMAIL
       - FIRST_USER_PASS
       - TOKEN_SECRET
-  postgres:
-    container_name: postgres
-    image: postgres
-    environment:
-      - POSTGRES_USER
-      - POSTGRES_PASSWORD
-      - POSTGRES_DB=boleta
-    ports:
-      - "5432:5432"
-    volumes:
-      - ./pgdata:/var/lib/postgresql/data
+    extra_hosts:
+        - "host.docker.internal:host-gateway"
+  # postgres:
+    # container_name: postgres
+    # image: postgres
+    # environment:
+    #   - POSTGRES_USER
+    #   - POSTGRES_PASSWORD
+    #   - POSTGRES_DB=boleta
+    # ports:
+    #   - "5432:5432"
+    # volumes:
+    #   - ./pgdata:/var/lib/postgresql/data
 networks:
   default:
     external:
       name: all-apps
-volumes:
-  pgdata:
-
-# PGDATA
-# POSTGRES_INITDB_ARGS
+# volumes:
+#   pgdata:
