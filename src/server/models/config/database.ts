@@ -1,13 +1,19 @@
 import { Sequelize } from "sequelize";
 
-export default process.env.POSTGRES_DB ?
+const { POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD, DB_URL, DB_PORT } = process.env;
+
+export default POSTGRES_DB ?
+    // new Sequelize(`postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DB_URL}:${DB_PORT}/${POSTGRES_DB}?sslmode=require`)
+    // :
     new Sequelize(
-        process.env.POSTGRES_DB || "",
-        process.env.POSTGRES_USER || "",
-        process.env.POSTGRES_PASSWORD || "",
+        POSTGRES_DB || "",
+        POSTGRES_USER || "",
+        POSTGRES_PASSWORD || "",
         {
-            host: 'host.docker.internal',
+            host: DB_URL,
+            port: parseInt(DB_PORT || "5432"),
             dialect: 'postgres',
+            dialectOptions: { ssl: true },
             logging: false,
             pool: {
                 max: 5,

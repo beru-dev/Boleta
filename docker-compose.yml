@@ -11,13 +11,13 @@ services:
     environment:
       - POSTGRES_USER
       - POSTGRES_PASSWORD
-      - POSTGRES_DB=boleta
+      - POSTGRES_DB
+      - DB_URL
+      - DB_PORT
       - FIRST_USER_NAME
       - FIRST_USER_EMAIL
       - FIRST_USER_PASS
       - TOKEN_SECRET
-    extra_hosts:
-        - "host.docker.internal:host-gateway"
   # postgres:
     # container_name: postgres
     # image: postgres
