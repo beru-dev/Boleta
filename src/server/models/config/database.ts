@@ -13,7 +13,12 @@ export default POSTGRES_DB ?
             host: DB_URL,
             port: parseInt(DB_PORT || "5432"),
             dialect: 'postgres',
-            dialectOptions: { ssl: true },
+            dialectOptions: {
+                ssl: {
+                    require: true,
+                    rejectUnauthorized: false
+                }
+            },
             logging: false,
             pool: {
                 max: 5,
