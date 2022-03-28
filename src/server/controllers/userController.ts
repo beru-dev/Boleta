@@ -4,18 +4,18 @@ import UserModel from "../models/UserModel";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
-const createFirstUser = async () => {
-    const { FIRST_USER_NAME, FIRST_USER_EMAIL, FIRST_USER_PASS } = process.env;
-    if(!FIRST_USER_NAME || !FIRST_USER_EMAIL || !FIRST_USER_PASS)  return;
+// const createFirstUser = async () => {
+//     const { FIRST_USER_NAME, FIRST_USER_EMAIL, FIRST_USER_PASS } = process.env;
+//     if(!FIRST_USER_NAME || !FIRST_USER_EMAIL || !FIRST_USER_PASS)  return;
 
-    UserModel.createUser({
-        user_name: FIRST_USER_NAME,
-        user_email: FIRST_USER_EMAIL,
-        password: await bcrypt.hash(FIRST_USER_PASS, 10)
-    });
-}
+//     UserModel.createUser({
+//         user_name: FIRST_USER_NAME,
+//         user_email: FIRST_USER_EMAIL,
+//         password: await bcrypt.hash(FIRST_USER_PASS, 10)
+//     });
+// }
 
-createFirstUser();
+// createFirstUser();
 
 export default Router()
     .post("/login", async (req, res) => {
