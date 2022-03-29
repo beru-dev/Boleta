@@ -17,3 +17,5 @@ notes.txt
 .env
 
 .DS_Store
+
+/src/server/public/main.js

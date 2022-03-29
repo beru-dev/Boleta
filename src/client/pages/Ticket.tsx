@@ -7,6 +7,7 @@ import UpdateField from "../components/UpdateField";
 import SelectorOptions from "../components/SelectorOptions";
 import Waiting from "../svg/Waiting";
 import fetchAPI from "../utils/fetchAPI";
+import options from "../data/optionTypes.json";
 
 const Ticket: React.FC = () => {
     const [message, setMessage] = useState(""),
@@ -39,10 +40,10 @@ const Ticket: React.FC = () => {
             <UpdateField label="Title" name="title" value={title} />
             <UpdateField label="Description" name="ticket_description" type="textarea" value={ticket_description} />
             <UpdateField name="ticket_priority" label="Priority" type="select" value={ticket_priority}>
-                <SelectorOptions optionType="priority" />
+                <SelectorOptions options={options["priority"]} />
             </UpdateField>
             <UpdateField name="ticket_status" label="Status" type="select" value ={ticket_status}>
-                <SelectorOptions optionType="status" />
+                <SelectorOptions options={options["status"]} />
             </UpdateField>
             <UpdateField label="Story Points" name="story_points" value={story_points} />
             <div>{createdAt}</div>
