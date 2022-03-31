@@ -2,12 +2,8 @@ import Sequelize from "sequelize";
 import db from "./config/database";
 
 export default db.define("tickets", {
-    project_name: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
     ticket_number: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         unique: true,
         allowNull: false
     },

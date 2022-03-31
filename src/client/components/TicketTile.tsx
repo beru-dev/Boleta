@@ -14,14 +14,13 @@ const TileStyled = styled.article`
 `;
 
 interface TicketTileProps {
-    project_name: string
     ticket_number: string
     title: string
 }
 
-const TicketTile: React.FC<TicketTileProps> = ({ project_name, ticket_number, title }) => (
+const TicketTile: React.FC<TicketTileProps> = ({ ticket_number, title }) => (
     <TileStyled>
-        <Link to={`/ticket/${project_name}-${ticket_number}`}>{`${project_name}-${ticket_number}`}</Link>
+        <Link to={`/ticket/${ticket_number}`}>{ticket_number}</Link>
         <h2>{title}</h2>
     </TileStyled>
 )

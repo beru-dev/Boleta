@@ -31,7 +31,7 @@ const Dashboard: React.FC = () => {
         <DashboardStyled>
             {
                 !isLoading ? tickets.map(({id, title, project_name, ticket_number}) => (
-                    <TicketTile key={id} project_name={project_name} ticket_number={ticket_number} title={title} />
+                    <TicketTile key={id} ticket_number={ticket_number} title={title} />
                 )) :
                 <Waiting />
             }

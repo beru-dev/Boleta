@@ -6,16 +6,18 @@ import User from "./UserEntity";
 const Op = Sequelize.Op;
 
 export default {
-    getAllTickets: async () => await Ticket.findAll(),
+    getAllTickets: async () => {
+        try {
+            return await Ticket.findAll();
+        } catch (error) {
+            console.error(error);
+        }
+    },
 
     getTicket: async (ticket: string) => {
-        const [project_name, ticket_number] = ticket.split("-");
         return await Ticket.findOne({
             where: {
-                [Op.and]: {
-                    project_name,
-                    ticket_number
-                }
+                ticket_number: ticket
             }
         });
     },
@@ -23,7 +25,7 @@ export default {
     getTicketsByProject: async (project: string) => {
         return await Ticket.findAll({
             where: {
-                project_name: { [Op.like]: project } 
+                ticket_number: { [Op.startsWith]: `${project}-` }
             }
         });
     },
@@ -58,22 +60,20 @@ export default {
             ticket_priority,
             story_points,
             ticket_description,
-            // assignee,
             submitter
         }: any) => {
         const projectExists = await Project.count({ where: { name: project_name }}),
-            ticket_number = await Ticket.count({ where: { project_name } }),
-            // assignedUser: any = await User.findOne({
-            //     where: { user_name: assignee },
-            //     attributes: ["id"]
-            // }),
+            ticketCount = await Ticket.count({
+                where: {
+                    ticket_number: { [Op.startsWith]: `${project_name}-` }
+                }
+            }),
             submittingUser: any = await User.findOne({
                 where: { user_name: submitter },
                 attributes: ["id"]
             });
 
         if(!projectExists) throw new Error(`Project ${project_name} does not exist`);
-        // if(!assignedUser) throw new Error(`Assign ${assignee} does not exist`);
         if(!submittingUser) throw new Error(`Submitter ${submitter} does not exist`);
         if(typeof story_points !== "number") {
             const storyPointsNumber = parseInt(story_points);
@@ -81,17 +81,19 @@ export default {
             story_points = storyPointsNumber;
         }
 
-        return await Ticket.create({
-            project_name,
-            ticket_number: ticket_number + 1,
-            title,
-            ticket_status: "To Do",
-            ticket_priority,
-            story_points,
-            ticket_description,
-            // assignee_id: assignedUser.id,
-            submitter_id: submittingUser.id
-        });
+        try {
+            return await Ticket.create({
+                ticket_number: `${project_name}-${ticketCount + 1}`,
+                title,
+                ticket_status: "To Do",
+                ticket_priority,
+                story_points,
+                ticket_description,
+                submitter_id: submittingUser.id
+            });
+        } catch (error) {
+            console.error(error)
+        }
     },
 
     updateTicket: async (id: string, newData: object) => {
