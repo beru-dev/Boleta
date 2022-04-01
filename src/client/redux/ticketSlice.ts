@@ -1,22 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { Ticket } from "../../types/ModelTypes";
 import fetchAPI from "../utils/fetchAPI";
-
-interface Ticket {
-    id: number
-    project_name: string
-    ticket_number: string
-    title: string
-    ticket_status: string
-    ticket_priority: string
-    story_points: number
-    createdAt: string
-    created_by_id: number
-    updatedAt: number
-    assignee_id: number
-    ticket_description: string
-    submitter_id: number
-    projectId: number | null
-}
 
 interface Tickets {
     tickets: Ticket[]

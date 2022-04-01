@@ -1,9 +1,24 @@
 import React from "react";
 import styled from "styled-components";
+import { Ticket } from "../../types/ModelTypes";
 import { Link } from "react-router-dom";
 
 const TileStyled = styled.article`
     padding: 1rem 2rem;
+    margin: 1rem;
+    background: var(--dark-1);
+    &.priority-done {
+        border-left: .5rem solid gray;
+    }
+    &.priority-low {
+        border-left: .5rem solid green;
+    }
+    &.priority-medium {
+        border-left: .5rem solid yellow;
+    }
+    &.priority-high {
+        border-left: .5rem solid red;
+    }
     a {
         text-decoration: none;
         color: var(--light-1);
@@ -14,15 +29,23 @@ const TileStyled = styled.article`
 `;
 
 interface TicketTileProps {
-    ticket_number: string
-    title: string
+    ticket: Ticket
 }
 
-const TicketTile: React.FC<TicketTileProps> = ({ ticket_number, title }) => (
-    <TileStyled>
-        <Link to={`/ticket/${ticket_number}`}>{ticket_number}</Link>
-        <h2>{title}</h2>
-    </TileStyled>
-)
+const TicketTile: React.FC<TicketTileProps> = ({ ticket }) => {
+    const { ticket_number, title, ticket_status, ticket_priority } = ticket,
+        priority =
+            ticket_status === "Done" ? "priority-done" :
+            ticket_priority === "Low" ? "priority-low" :
+            ticket_priority === "Medium" ? "priority-medium" :
+            ticket_priority === "High" ? "priority-high" : "";
+
+    return (
+        <TileStyled className={priority}>
+            <Link to={`/ticket/${ticket_number}`}>{ticket_number}</Link>
+            <h3>{title}</h3>
+        </TileStyled>
+    )
+}
 
 export default TicketTile;

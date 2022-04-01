@@ -9,7 +9,10 @@ import TicketTile from "../components/TicketTile";
 import Waiting from "../svg/Waiting";
 
 const DashboardStyled = styled.section`
-    padding: .5rem 20rem;
+    padding: 0.5rem;
+    @media (min-width: 769px) {
+        padding: .5rem 20rem;
+    }
 `;
 
 const Dashboard: React.FC = () => {
@@ -30,8 +33,8 @@ const Dashboard: React.FC = () => {
     return (
         <DashboardStyled>
             {
-                !isLoading ? tickets.map(({id, title, project_name, ticket_number}) => (
-                    <TicketTile key={id} ticket_number={ticket_number} title={title} />
+                !isLoading ? tickets.map(ticket => (
+                    <TicketTile key={ticket.id} ticket={ticket} />
                 )) :
                 <Waiting />
             }

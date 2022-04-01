@@ -5,6 +5,7 @@ export default createGlobalStyle`
         --dark-0: #171717;
         --dark-1: #232323;
         --dark-2: #333333;
+        --dark-3: #454545;
         --light-0: #ffffff;
         --light-1: #e5e5e5;
         --light-2: #b5b5b5;
@@ -22,13 +23,24 @@ export default createGlobalStyle`
     #root {
         display: grid;
         grid-template:
-        "header nav"
-        "main main"
-        "footer footer" / 1fr 4fr
+            "header"
+            "nav"
+            "main"
+            "footer"
+    }
+
+    @media (min-width: 769px) {
+        #root {
+            display: grid;
+            grid-template:
+                "header nav"
+                "main main"
+                "footer footer" / 1fr 4fr
+        }
     }
 
     main {
         grid-area: main;
-        background: var(--dark-2);
+        background: var(--dark-0);
     }
 `;

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import FieldStyled from "./FieldStyled";
 import Input from "./Input";
 import { ChangeEvent } from "../types";
 
@@ -20,14 +21,16 @@ const UpdateField: React.FC<UpdateFieldProps> = ({ name, label, value, type = "t
             stateChanger(name, e.target.value);
         }
 
-    return (<>
-        <label onBlur={() => setUpdating(false)} htmlFor={name}>{label}</label>
-        {
-            updating ?
-                <Input name={name} type={type} changeHandler={changeHandler}>{children}</Input> :
-                <div onDoubleClick={() => setUpdating(true)}>{updatableValue}</div>
-        }
-    </>)
+    return (
+        <FieldStyled>
+            <label onBlur={() => setUpdating(false)} htmlFor={name}>{label}</label>
+            {
+                updating ?
+                    <Input name={name} type={type} changeHandler={changeHandler}>{children}</Input> :
+                    <div onDoubleClick={() => setUpdating(true)}>{updatableValue}</div>
+            }
+        </FieldStyled>
+    )
 }
 
 export default UpdateField;

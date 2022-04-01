@@ -1,4 +1,5 @@
 import React from "react";
+import FieldStyled from "./FieldStyled";
 import Input from "./Input";
 import { ChangeEvent } from "../types";
 
@@ -15,10 +16,12 @@ const Field: React.FC<FieldProps> = ({ name, label, type = "text", stateChanger,
         stateChanger(name, e.target.value);
     }
 
-    return (<>
-        <label htmlFor={name}>{label}</label>
-        <Input name={name} type={type} changeHandler={changeHandler}>{children}</Input>
-    </>)
+    return (
+        <FieldStyled data-field={name}>
+            <label htmlFor={name}>{label}</label>
+            <Input name={name} type={type} changeHandler={changeHandler}>{children}</Input>
+        </FieldStyled>
+    )
 }
 
 export default Field;

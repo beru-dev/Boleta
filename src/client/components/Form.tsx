@@ -3,9 +3,20 @@ import styled from "styled-components";
 
 const FormStyled = styled.form`
     color: var(--light-0);
-    padding: .5rem 20rem;
     display: grid;
     gap: 1rem;
+    padding: 0.5rem;
+    button {
+        color: var(--light-0);
+        background: var(--accent-2);
+        border: 0;
+        max-width: max-content;
+        justify-self: center;
+        padding: 0.4rem 1rem;
+    }
+    @media (min-width: 769px) {
+        padding: .5rem 20rem;
+    }
 `;
 
 interface FormProps {
