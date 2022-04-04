@@ -1,42 +1,39 @@
 import { Router } from "express";
 import UserModel from "../models/UserModel";
-// import isValidEmail from "../utils/isValidEmail";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-
-// const createFirstUser = async () => {
-//     const { FIRST_USER_NAME, FIRST_USER_EMAIL, FIRST_USER_PASS } = process.env;
-//     if(!FIRST_USER_NAME || !FIRST_USER_EMAIL || !FIRST_USER_PASS)  return;
-
-//     UserModel.createUser({
-//         user_name: FIRST_USER_NAME,
-//         user_email: FIRST_USER_EMAIL,
-//         password: await bcrypt.hash(FIRST_USER_PASS, 10)
-//     });
-// }
-
-// createFirstUser();
+import checkRole from "../utils/checkRole";
+import verifyToken from "../utils/verifyToken";
 
 export default Router()
     .post("/login", async (req, res) => {
-        if(!req.body) res.status(401).send("User info not provided.");
-
-        const user = await UserModel.getUserByName(req.body.user_name) as any;
-        if(!user) res.status(403).send("User not found.");
-
         try {
+            if(!req.body) res.status(401).send("User info not provided.");
+
+            const user = await UserModel.getUserByName(req.body.user_name) as any;
+            if(!user) return res.status(403).send("User not found.");
+
             if(await bcrypt.compare(req.body.password, user.password)) {
 
                 return jwt.sign(
-                    { user },
+                    { id: user.id, role: user.user_role },
                     process.env.TOKEN_SECRET || "",
                     { expiresIn: "1d" },
                     (err, token) => {
-                        res.status(200).json({
-                            message: "User logged in.",
-                            token,
-                            user_name: user.user_name
-                        })
+                        const expires = new Date();
+                        expires.setDate(expires.getDate() + 1);
+                        res
+                            .status(200)
+                            .cookie("access_token", token, {
+                                httpOnly: true,
+                                secure: process.env.NODE_ENV === "production",
+                                expires,
+                                sameSite: true
+                            })
+                            .json({
+                                message: "User logged in.",
+                                user_name: user.user_name
+                            })
                     }
                 );
             }
@@ -44,21 +41,23 @@ export default Router()
             res.status(500).send("Could not authenticate user.")
         }
     })
-    // .post("/register", async (req, res) => {
-    //     if(!req.body) return res.status(401).send("User data not provided.");
+    .post("/logout", (_, res) => {
+        return res
+            .clearCookie("access_token")
+            .status(200)
+            .json({ message: "Logged out" });
+    })
+    .post("/register", verifyToken, checkRole("ADMIN"), async (req, res) => {
+        if(!req.body) return res.status(401).send("User data not provided.");
 
-    //     const { user_name, user_email, password } = req.body;
-    //     if(typeof user_name !== "string" || user_name.length === 0) res.status(401).send("Invalid user name");
-    //     if(!isValidEmail(user_email)) return res.status(401).send("Invalid email");
+        try {
+            UserModel.createUser({
+                ...req.body,
+                password: await bcrypt.hash(req.body.password, 10),
 
-    //     try {
-    //         UserModel.createUser({
-    //             user_name,
-    //             user_email,
-    //             password: await bcrypt.hash(password, 10)
-    //         });
-    //         res.status(200).send("User registered");
-    //     } catch (error) {
-    //         res.status(500).send("Could not register user");
-    //     }
-    // })
+            });
+            res.status(200).send("User registered");
+        } catch (error: any) {
+            res.status(401).send(error.message);
+        }
+    })

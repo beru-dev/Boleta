@@ -2,16 +2,20 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from "jsonwebtoken";
 
 export default (req: Request, res: Response, next: NextFunction) => {
-    const bearerHeader = req.headers.authorization;
-
-    if(!bearerHeader) return res.status(403).json({ status: 403, message: "User not logged in." });
+    const token: string = req.cookies?.access_token;
+    if(!token) return res.status(403).json({ message: "User not logged in." });
 
     jwt.verify(
-        bearerHeader.split(" ")[1] || "",
+        token,
         process.env.TOKEN_SECRET || "",
         async (err, authData) => {
-            if(err) return res.status(403).json({ status: 403, message: "User not authorized." });
-
+            if(err) return res.status(403).json({ message: "User not authorized." });
+            if(typeof authData === "string" || !authData) {
+                console.log(`authData: ${authData}`)
+                return res.status(403).json({ message: "User info not provided." });
+            }
+            req.userId = authData.id;
+            req.userRole = authData.role;
             return next();
         }
     );

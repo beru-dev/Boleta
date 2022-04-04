@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { getTickets } from "../redux/ticketSlice";
-import jsonParseSafe from "../utils/jsonParseSafe";
+import isAuthed from "../utils/isAuthed";
 import TicketTile from "../components/TicketTile";
 import Waiting from "../svg/Waiting";
 
@@ -18,11 +18,10 @@ const DashboardStyled = styled.section`
 const Dashboard: React.FC = () => {
     const { tickets, isSuccess, isError, isLoading } = useAppSelector(state => state.tickets),
         dispatch = useAppDispatch(),
-        navigate = useNavigate(),
-        { user_name } = jsonParseSafe(localStorage.getItem("user")) || {};
+        navigate = useNavigate();
 
     useEffect(() => {
-        if(!user_name || isError) {
+        if(!isAuthed() || isError) {
             navigate("/login");
             return
         }

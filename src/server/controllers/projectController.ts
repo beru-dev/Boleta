@@ -1,30 +1,31 @@
 import { Router } from "express";
-import Project from "../models/ProjectModel";
+import { createProject, deleteProject, getAllProjects } from "../models/ProjectModel";
 import verifyToken from "../utils/verifyToken";
+import checkRole from "../utils/checkRole";
 
 export default Router()
     .use(verifyToken)
-    .get("/", async (req, res) => {
+    .get("/", async (_, res) => {
         try {
-            const data = await Project.getAllProjects();
+            const data = await getAllProjects();
             res.status(200).json(data);
         } catch (error) {
             console.error(error);
             res.status(404).send(error);
         }
     })
-    .post("/", async (req, res) => {
+    .post("/", checkRole("ADMIN"), async (req, res) => {
         try {
-            const data = await Project.createProject(req.body.name);
+            const data = await createProject(req.body.name);
             res.status(200).json(data)
         } catch (error) {
             console.error(error);
             res.status(404).send(error);
         }
     })
-    .delete("/", async (req, res) => {
+    .delete("/", checkRole("ADMIN"), async (req, res) => {
         try {
-            const data = await Project.deleteProject(req.body.name);
+            const data = await deleteProject(req.body.name);
             res.status(200).json(data)
         } catch (error) {
             console.error(error);

@@ -16,11 +16,11 @@ const CreateTicket: React.FC = () => {
                 name = user?.user_name;
                 data.submitter = name;
             try {
-                await fetchAPI("ticket", "POST", data);
-                // navigate("/newTicket")
-                navigate("/")
+                const res = await fetchAPI("ticket", "POST", data);
+                if(!res.ticket_number) throw new Error("Unable to post ticket.")
+                navigate(`/ticket/${res.ticket_number}`);
             } catch (error) {
-                setMessage("Error: unable to post ticket");
+                setMessage(`Create ticket: ${error}`);
             }
         };
 
@@ -42,10 +42,6 @@ const CreateTicket: React.FC = () => {
                 <Field name="ticket_priority" label="Priority" type="select">
                     <SelectorOptions options={options["priority"]} />
                 </Field>
-                <Field name="ticket_status" label="Status" type="select">
-                    <SelectorOptions options={options["status"]} />
-                </Field>
-                <Field name="assignee" label="Assignee" />
                 <Field name="story_points" label="Story Points" />
                 <Field name="ticket_description" label="Description" type="textarea" />
             </Form>

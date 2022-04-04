@@ -15,5 +15,8 @@ export default db.define("users", {
     password: {
         type: Sequelize.STRING,
         allowNull: false
+    },
+    user_role: {
+        type: Sequelize.STRING
     }
 });

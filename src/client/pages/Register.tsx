@@ -7,7 +7,7 @@ import fetchAPI from "../utils/fetchAPI";
 const Register: React.FC = () => {
     const navigate = useNavigate(),
         registerUser = async (user: NewUser) => {
-            const { status } = await fetchAPI("user/login", "POST", user, false);
+            const { status } = await fetchAPI("user/login", "POST", user);
             if(status !== 200) {
                 console.error(`Error: could not register user: ${status}`)
                 return

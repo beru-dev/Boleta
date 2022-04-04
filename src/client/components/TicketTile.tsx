@@ -5,8 +5,10 @@ import { Link } from "react-router-dom";
 
 const TileStyled = styled.article`
     padding: 1rem 2rem;
+    border-radius: 0.3rem;
     margin: 1rem;
     background: var(--dark-1);
+    box-shadow: 0.1rem 0.2rem 0.8rem black;
     &.priority-done {
         border-left: .5rem solid gray;
     }

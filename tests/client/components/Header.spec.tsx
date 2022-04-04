@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "../../src/client/components/Header";
+import Header from "../../../src/client/components/Header";
 import { render } from "@testing-library/react";
 
 describe("Header", () => {
