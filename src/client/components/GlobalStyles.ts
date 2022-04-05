@@ -42,5 +42,11 @@ export default createGlobalStyle`
     main {
         grid-area: main;
         background: var(--dark-0);
+        > section {
+            padding: 0.5rem;
+            @media (min-width: 769px) {
+                padding: .5rem 20rem;
+            }
+        }
     }
 `;
