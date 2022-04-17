@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { getTicket } from "../redux/ticketSlice";
@@ -15,28 +16,73 @@ const Ticket: React.FC = () => {
     if(!ticketID) return <div>{`Error retrieving ticket ${ticketID}`}</div>
 
     useEffect(() => {
-        if(ticket) return;
         dispatch(getTicket(ticketID));
-    }, [ticket]);
+    }, []);
 
     if(!ticket) return <Waiting />
-    const { id, title, ticket_description, ticket_status, ticket_priority, story_points, createdAt, updatedAt,  } = ticket;
+    const { id, title, ticket_description, ticket_status, ticket_priority, story_points, createdAt, updatedAt, ticket_number } = ticket;
 
     return (
-        <section>
-            <UpdateField id={id} label="Title" name="title" value={title} />
-            <UpdateField id={id} label="Description" name="ticket_description" type="textarea" value={ticket_description} />
-            <UpdateField id={id} name="ticket_priority" label="Priority" type="select" value={ticket_priority}>
-                <SelectorOptions options={options["priority"]} />
-            </UpdateField>
-            <UpdateField id={id} name="ticket_status" label="Status" type="select" value ={ticket_status}>
-                <SelectorOptions options={options["status"]} />
-            </UpdateField>
-            <UpdateField id={id} label="Story Points" name="story_points" value={story_points} />
-            <div>{createdAt}</div>
-            <div>{updatedAt}</div>
-        </section>
+        <StyledTicket>
+            <fieldset className="ticket-title">
+                <p>{ticket_number}</p>
+                <UpdateField id={id} name="title" value={title} valueDisplayElement="h1" />
+            </fieldset>
+            <fieldset className="ticket-info">
+                <UpdateField id={id} name="ticket_priority" label="Priority" type="select" value={ticket_priority}>
+                    <SelectorOptions options={options["priority"]} />
+                </UpdateField>
+                <UpdateField id={id} name="ticket_status" label="Status" type="select" value ={ticket_status}>
+                    <SelectorOptions options={options["status"]} />
+                </UpdateField>
+                <UpdateField id={id} label="Story Points" name="story_points" value={story_points} />
+            </fieldset>
+            <fieldset className="ticket-people">
+                <div>Assignee:</div>
+                <div>Submitter:</div>
+            </fieldset>
+            <fieldset className="ticket-dates">
+                <div>Created: {`${new Date(createdAt)}`}</div>
+                <div>Updated: {`${new Date(updatedAt)}`}</div>
+            </fieldset>
+            <fieldset className="ticket-description">
+                <UpdateField id={id} label="Description" name="ticket_description" type="textarea" orientation="vertical" value={ticket_description} valueDisplayElement="div" />
+            </fieldset>
+        </StyledTicket>
     )
 }
 
 export default Ticket;
+
+const StyledTicket = styled.section`
+    display: grid;
+    grid-template:
+        "title title"
+        "info people"
+        "info dates"
+        "description description" / 1fr 1fr;
+    gap: 2rem;
+    fieldset {
+        border: none;
+        margin: 0;
+        padding: 0;
+        & > div {
+            margin: 0.5rem 0;
+        }
+    }
+    .ticket-title {
+        grid-area: title;
+    }
+    .ticket-info {
+        grid-area: info;
+    }
+    .ticket-people {
+        grid-area: people;
+    }
+    .ticket-dates {
+        grid-area: dates;
+    }
+    .ticket-description {
+        grid-area: description;
+    }
+`;

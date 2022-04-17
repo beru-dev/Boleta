@@ -4,11 +4,13 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { getTickets } from "../redux/ticketSlice";
 import isAuthed from "../utils/isAuthed";
+import sortByPriority from "../utils/sortByPriority";
 import TicketTile from "../components/TicketTile";
 import Waiting from "../svg/Waiting";
 
 const Dashboard: React.FC = () => {
     const { tickets, isSuccess, isError, isLoading } = useAppSelector(state => state.tickets),
+        { name } = useAppSelector(state => state.user.user),
         dispatch = useAppDispatch(),
         navigate = useNavigate();
 
@@ -18,13 +20,13 @@ const Dashboard: React.FC = () => {
             return
         }
         if(tickets.length > 0 || isSuccess) return;
-        dispatch(getTickets());
+        dispatch(getTickets(`?active=true&assignee=${name}`));
     }, [tickets]);
 
     return (
         <section>
             {
-                !isLoading ? tickets.map(ticket => (
+                !isLoading ? sortByPriority(tickets).map(ticket => (
                     <TicketTile key={ticket.id} ticket={ticket} />
                 )) :
                 <Waiting />

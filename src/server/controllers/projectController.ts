@@ -9,26 +9,23 @@ export default Router()
         try {
             const data = await getAllProjects();
             res.status(200).json(data);
-        } catch (error) {
-            console.error(error);
-            res.status(404).send(error);
+        } catch ({ message }) {
+            res.status(404).json({ message });
         }
     })
     .post("/", checkRole("ADMIN"), async (req, res) => {
         try {
             const data = await createProject(req.body.name);
-            res.status(200).json(data)
-        } catch (error) {
-            console.error(error);
-            res.status(404).send(error);
+            res.status(201).json(data);
+        } catch ({ message }) {
+            res.status(404).json({ message });
         }
     })
     .delete("/", checkRole("ADMIN"), async (req, res) => {
         try {
             const data = await deleteProject(req.body.name);
-            res.status(200).json(data)
-        } catch (error) {
-            console.error(error);
-            res.status(404).send(error);
+            res.status(204).json(data);
+        } catch ({ message }) {
+            res.status(404).json({ message });
         }
     });

@@ -2,8 +2,8 @@ export interface Ticket {
     id: number
     ticket_number: string
     title: string
-    ticket_status: string
-    ticket_priority: string
+    ticket_status: Status
+    ticket_priority: Priority
     story_points: number
     createdAt: string
     updatedAt: string
@@ -11,6 +11,10 @@ export interface Ticket {
     ticket_description: string
     submitter_id: number
 }
+
+export type Status = "To Do" | "In Progress" | "Review" | "Done";
+
+export type Priority = "High" | "Medium" | "Low";
 
 interface User {
 

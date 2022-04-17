@@ -1,32 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import ActiveField from "./ActiveField";
 import InactiveField from "./InactiveField";
+import ItemWrapper, { Orientation } from "./styled/ItemWrapper";
 import fetchAPI from "../utils/fetchAPI";
+import { ValueType, InputType } from "../types";
 
 interface UpdateFieldProps {
     name: string
-    label: string
+    label?: string
     value: string | number
-    type?: "password" | "select" | "text" | "textarea"
+    type?: InputType
+    valueDisplayElement?: ValueType
+    orientation?: Orientation
     id: number
 }
 
-const UpdateField: React.FC<UpdateFieldProps> = ({ name, label, value, type = "text", id, children }) => {
+const UpdateField: React.FC<UpdateFieldProps> = ({ name, label, value, type = "text", valueDisplayElement, orientation, id, children }) => {
     const [isUpdating, setIsUpdating] = useState<boolean>(false),
         [updatableValue, setUpdatableValue] = useState<string | number>(value),
         toggleUpdating = () => setIsUpdating(!isUpdating),
+        rand = Math.floor(Math.random() * 1000),
         updateTicket = async () => {
-            const res = await fetchAPI(`ticket/ticket/${id}`, "PUT", { [name]: updatableValue });
+            const res = await fetchAPI(`ticket/id/${id}`, "PUT", { [name]: updatableValue });
+            console.log(res)
         };
 
+    useEffect(() => {
+        setUpdatableValue(value);
+    }, [value]);
+
     return (
-        <UpdateFieldStyled>
-            <label htmlFor={name}>{label}</label>
+        <UpdateFieldStyled orientation={!label ? "vertical" : orientation}>
+            { label && <label htmlFor={name}>{label}:</label>}
             {
                 isUpdating ?
-                    <ActiveField name={name} value={value} type={type} updateValue={setUpdatableValue} submitUpdate={updateTicket} deactivate={toggleUpdating} children={children} /> :
-                    <InactiveField fieldValue={updatableValue} activate={toggleUpdating} />
+                    <ActiveField name={name} value={updatableValue} type={type} updateValue={setUpdatableValue} submitUpdate={updateTicket} deactivate={toggleUpdating} children={children} /> :
+                    <InactiveField fieldValue={updatableValue} ValueElement={valueDisplayElement} activate={toggleUpdating} />
             }
         </UpdateFieldStyled>
     )
@@ -34,15 +44,10 @@ const UpdateField: React.FC<UpdateFieldProps> = ({ name, label, value, type = "t
 
 export default UpdateField;
 
-const UpdateFieldStyled = styled.div`
+const UpdateFieldStyled = styled(ItemWrapper)`
     display: grid;
-    grid-template-columns: 8rem 1fr;
-    input, select, textarea {
-        background: var(--dark-3);
-        color: var(--light-1);
-        border: 0;
+    grid-template-columns: ${({ orientation = "horizontal" }) => orientation === "horizontal" ? "8rem 1fr" : "1fr"};
+    label {
+        color: var(--light-2);
     }
-    textarea {
-        display: block;
-    } 
-`
+`;

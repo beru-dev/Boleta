@@ -1,13 +1,15 @@
 import React from "react";
 import styled from "styled-components";
+import { Draggable } from "react-beautiful-dnd";
 import { Ticket } from "../../types/ModelTypes";
 import { Link } from "react-router-dom";
 
-interface TicketTileProps {
+interface DraggableTicketTileProps {
     ticket: Ticket
+    index: number
 }
 
-const TicketTile: React.FC<TicketTileProps> = ({ ticket }) => {
+const DraggableTicketTile: React.FC<DraggableTicketTileProps> = ({ ticket, index }) => {
     const { ticket_number, title, ticket_status, ticket_priority } = ticket,
         priority =
             ticket_status === "Done" ? "priority-done" :
@@ -16,14 +18,18 @@ const TicketTile: React.FC<TicketTileProps> = ({ ticket }) => {
             ticket_priority === "High" ? "priority-high" : "";
 
     return (
-        <TileStyled className={priority}>
-            <Link to={`/ticket/${ticket_number}`}>{ticket_number}</Link>
-            <h3>{title}</h3>
-        </TileStyled>
+        <Draggable draggableId={ticket.id.toString()} index={index}>
+            {(provided) => (
+                <TileStyled className={priority} {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
+                    <Link to={`/ticket/${ticket_number}`}>{ticket_number}</Link>
+                    <h3>{title}</h3>
+                </TileStyled>
+            )}
+        </Draggable>
     )
 }
 
-export default TicketTile;
+export default DraggableTicketTile;
 
 const TileStyled = styled.article`
     padding: 1rem 2rem;

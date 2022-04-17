@@ -9,7 +9,9 @@ const roleLevels: Role[] = ["GUEST", "BASIC", "ADMIN"],
 export default (role: Role) => {
     return (req: Request, res: Response, next: NextFunction) => {
         if(getRoleLevel(req.userRole as Role) < getRoleLevel(role)) {
-            return res.status(401).send({ message: "Insufficient permission." });
+            res.status(401)
+            res.send({ message: "Insufficient permission." });
+            return
         }
 
         next();

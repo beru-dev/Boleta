@@ -45,8 +45,15 @@ export default createGlobalStyle`
         > section {
             padding: 0.5rem;
             @media (min-width: 769px) {
-                padding: .5rem 20rem;
+                padding: 1rem 4rem;
             }
         }
+    }
+
+    button {
+        background: var(--dark-3);
+        border: none;
+        color: white;
+        padding: 0.2rem 0.5rem;
     }
 `;
