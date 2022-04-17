@@ -45,7 +45,7 @@ const Form: React.FC<FormProps> = ({ formDataHandler, children }) => {
                 message && <div>{message}</div> ||
                 React.Children.map(
                     children,
-                    child => React.isValidElement(child) ? React.cloneElement(child, { stateChanger }) : child
+                    child => React.isValidElement(child) ? React.cloneElement(child, { body, stateChanger }) : child
                 )
             }
             <button onClick={submitHandler}>Submit</button>

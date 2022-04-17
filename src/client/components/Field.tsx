@@ -6,11 +6,12 @@ import { ChangeEvent } from "../types";
 interface FieldProps {
     name: string
     label: string
+    body?: {[index: string]: any}
     type?: "password" | "select" | "text" | "textarea" | "email"
     stateChanger?: (key: string, value: string) => void
 }
 
-const Field: React.FC<FieldProps> = ({ name, label, type = "text", stateChanger, children }) => {
+const Field: React.FC<FieldProps> = ({ name, label, body, type = "text", stateChanger, children }) => {
     const changeHandler = (e: ChangeEvent) => {
         if(!stateChanger) return console.log(`No state changer provided for ${name}`);
         stateChanger(name, e.target.value);
@@ -19,7 +20,7 @@ const Field: React.FC<FieldProps> = ({ name, label, type = "text", stateChanger,
     return (
         <FieldStyled data-field={name}>
             <label htmlFor={name}>{label}</label>
-            <Input name={name} type={type} changeHandler={changeHandler}>{children}</Input>
+            <Input name={name} value={body && body[name] || ""} type={type} changeHandler={changeHandler}>{children}</Input>
         </FieldStyled>
     )
 }
